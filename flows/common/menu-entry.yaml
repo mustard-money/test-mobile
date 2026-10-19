@@ -1,0 +1,20 @@
+# Taps ENTRY in the open navigation menu.
+#
+# Android: the page behind the open menu is still on screen as far as Maestro
+# can tell, and it can show the same word (an "Income" heading on Home, the
+# page's own title), so the entry is looked for inside the menu (its testID).
+appId: com.mustard.app
+---
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - tapOn:
+          text: ${ENTRY}
+          childOf:
+            id: nav-menu
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: ${ENTRY}

@@ -1,0 +1,60 @@
+appId: com.mustard.app
+name: 07 Add expenses
+---
+- launchApp
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Expenses
+- tapOn: Add expense
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Name
+      VALUE: Rent
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Amount
+      VALUE: "2400"
+# New expenses default to one-time.
+- runFlow:
+    file: common/choose.yaml
+    env:
+      FIELD: How often
+      OPTION: Monthly
+- scrollUntilVisible:
+    element: Save expense
+    centerElement: true
+- tapOn: Save expense
+
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Expenses
+- tapOn: Add expense
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Name
+      VALUE: Groceries
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Amount
+      VALUE: "900"
+- runFlow:
+    file: common/choose.yaml
+    env:
+      FIELD: How often
+      OPTION: Monthly
+- scrollUntilVisible:
+    element: Save expense
+    centerElement: true
+- tapOn: Save expense
+
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Expenses
+- assertVisible: .*\$3,300.00.*

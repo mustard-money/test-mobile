@@ -1,0 +1,9 @@
+# Opens a page from the navigation menu.
+# Usage: - runFlow: { file: common/open-section.yaml, env: { SECTION: Income } }
+appId: com.mustard.app
+---
+- runFlow: open-menu.yaml
+- runFlow:
+    file: menu-entry.yaml
+    env:
+      ENTRY: ${SECTION}

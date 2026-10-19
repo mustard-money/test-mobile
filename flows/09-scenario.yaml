@@ -1,0 +1,62 @@
+appId: com.mustard.app
+name: 09 Plan a scenario with a life event
+---
+- launchApp
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Scenarios
+- tapOn: Add scenario
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Name
+      VALUE: Retire at 60
+- tapOn: Create scenario
+- assertVisible: Retire at 60
+
+- scrollUntilVisible:
+    element: \+ Add life event
+    centerElement: true
+- tapOn: \+ Add life event
+# The event's Name (the scenario's own Name field is further up the page).
+- scrollUntilVisible:
+    element: Year it starts \(1 = first year\)
+    centerElement: true
+- tapOn:
+    text: Name
+    below: Life events
+- inputText: New roof
+- runFlow: common/hide-keyboard.yaml
+# The year starts at 1.
+- scrollUntilVisible:
+    element: Year it starts \(1 = first year\)
+    centerElement: true
+- tapOn: Year it starts \(1 = first year\)
+- eraseText
+- inputText: "3"
+- runFlow: common/hide-keyboard.yaml
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Amount \(today’s dollars\)
+      VALUE: "30000"
+- scrollUntilVisible:
+    element: Add event
+    centerElement: true
+- tapOn: Add event
+# Android keeps its place on the page when the form closes, which leaves the
+# new event just above the screen.
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - scrollUntilVisible:
+          element: Life events
+          direction: UP
+- scrollUntilVisible:
+    element: "Year 3: \\$30,000"
+- assertVisible: New roof
+# The projection, below the assumptions.
+- scrollUntilVisible:
+    element: Investments after 20 years, in today’s dollars

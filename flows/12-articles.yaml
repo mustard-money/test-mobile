@@ -1,0 +1,12 @@
+appId: com.mustard.app
+name: 12 Search the articles
+---
+- launchApp
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Articles
+- tapOn: Search articles
+- inputText: trade school
+- runFlow: common/hide-keyboard.yaml
+- assertVisible: Trade vs college.*

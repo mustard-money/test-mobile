@@ -1,0 +1,18 @@
+# Opens the navigation menu.
+appId: com.mustard.app
+---
+- tapOn: Show navigation menu
+# Android: a tap straight after launch can land while the app is still starting
+# and do nothing, so tap until the menu (its testID) shows its title.
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - repeat:
+          while:
+            notVisible:
+              text: Mustard
+              childOf:
+                id: nav-menu
+          commands:
+            - tapOn: Show navigation menu

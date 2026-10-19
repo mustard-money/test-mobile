@@ -1,0 +1,17 @@
+# Types VALUE into the text field labelled FIELD (a regex), then puts the
+# keyboard away. The field is first scrolled to the middle of the screen, where
+# the keyboard won't cover it.
+# Usage:
+#   - runFlow:
+#       file: common/fill.yaml
+#       env:
+#         FIELD: Amount
+#         VALUE: "5000"
+appId: com.mustard.app
+---
+- scrollUntilVisible:
+    element: ${FIELD}
+    centerElement: true
+- tapOn: ${FIELD}
+- inputText: ${VALUE}
+- runFlow: hide-keyboard.yaml

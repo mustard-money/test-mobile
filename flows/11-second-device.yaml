@@ -1,0 +1,56 @@
+appId: com.mustard.app
+name: 11 Sign in on a fresh install and find everything synced
+---
+# Like a second device: no local data and no saved session.
+- launchApp:
+    clearState: true
+    clearKeychain: true
+- assertVisible: Welcome to Mustard
+- runFlow:
+    file: common/open-home-page.yaml
+    env:
+      PAGE: Settings
+- tapOn:
+    text: Save to server
+    index: 1
+- tapOn: Sign in
+- tapOn: Email
+- inputText: ${EMAIL}
+- tapOn: Password
+- inputText: ${PASSWORD}
+- assertVisible: "•{24}"
+- runFlow: common/hide-keyboard.yaml
+# The submit button (the "Sign in" tab above the form comes first).
+- tapOn:
+    text: Sign in
+    index: 1
+- extendedWaitUntil:
+    visible: Signed in as ${EMAIL}
+    timeout: 15000
+- assertVisible: Synced at.*
+
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Income
+- assertVisible: Salary.*
+- assertVisible: Dividends.*
+- assertVisible: Pension.*
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Expenses
+- assertVisible: Rent.*
+- assertVisible: Groceries.*
+- assertVisible: Car insurance.*
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Household
+- assertVisible: Sam.*
+- assertNotVisible: Typo.*
+- runFlow:
+    file: common/open-home-page.yaml
+    env:
+      PAGE: Profile
+- assertVisible: "94103"

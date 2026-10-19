@@ -1,0 +1,27 @@
+appId: com.mustard.app
+name: 02 Fill in the profile
+---
+# The Profile is edited in place, so each field is cleared before typing.
+- launchApp
+- runFlow:
+    file: common/open-home-page.yaml
+    env:
+      PAGE: Profile
+- tapOn: ZIP code
+- eraseText
+- inputText: "94103"
+- runFlow: common/hide-keyboard.yaml
+- tapOn: Married filing jointly
+- tapOn: Default expected investment return, % a year
+- eraseText
+- inputText: "6"
+- runFlow: common/hide-keyboard.yaml
+- tapOn: Expected inflation, % a year
+- eraseText
+- inputText: "2.5"
+- runFlow: common/hide-keyboard.yaml
+
+# The Profile holds no tax rates: taxes are worked out on the server.
+- scrollUntilVisible:
+    element: .*worked out by the Mustard server.*
+- assertNotVisible: Federal income tax

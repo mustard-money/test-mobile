@@ -1,0 +1,15 @@
+# Puts the keyboard away the way a person would: by dragging the page (pages
+# dismiss the keyboard on drag). Maestro's hideKeyboard can't close a number
+# pad, which has no Return key.
+#
+# The drag is long and quick enough to read as a scroll rather than a tap on
+# whatever is under the finger. It may move the page, so flows find each field
+# again with scrollUntilVisible (common/fill.yaml) instead of relying on where
+# things were.
+appId: com.mustard.app
+---
+- swipe:
+    start: 50%,30%
+    end: 50%,45%
+    duration: 250
+- waitForAnimationToEnd

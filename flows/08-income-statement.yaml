@@ -1,0 +1,24 @@
+appId: com.mustard.app
+name: 08 Check the income statement on Home
+---
+- launchApp
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Home
+- assertVisible: Income statement
+- scrollUntilVisible:
+    element: Total income
+- assertVisible: .*\$11,333.*
+- scrollUntilVisible:
+    element: .*-\$3,300.*
+- scrollUntilVisible:
+    element: Total saved
+- scrollUntilVisible:
+    element: Yearly
+    direction: UP
+- tapOn: Yearly
+- scrollUntilVisible:
+    element: .*\$136,000.*
+- scrollUntilVisible:
+    element: Passive income.*

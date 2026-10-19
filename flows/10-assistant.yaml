@@ -1,0 +1,30 @@
+appId: com.mustard.app
+name: 10 Ask the assistant to add an expense
+---
+- launchApp
+- tapOn: Open the assistant
+
+# The stand-in model proposes the expense plus an invalid change.
+# (iOS reads the message box as its label plus placeholder.)
+- tapOn: Message.*
+- inputText: Please add my car insurance
+- tapOn: Send
+- assertVisible: "Add expense: Car insurance, \\$1,200.00 / year"
+- assertVisible: 1 proposed change wasn’t valid and was left out.
+- tapOn: Apply
+- assertVisible: Applied
+
+# Its answers see the data on the device, including what was just added.
+- tapOn: Message.*
+- inputText: What do I have?
+- tapOn: Send
+- assertVisible: 'You have \d+ items: .*Car insurance.*Salary.*'
+
+- tapOn:
+    text: Close the assistant
+    index: 0
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Expenses
+- assertVisible: Car insurance.*

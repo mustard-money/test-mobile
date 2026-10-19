@@ -1,0 +1,5 @@
+# Taps a screen point given as POINT ("x,y" in points); used by run.sh.
+appId: com.apple.Preferences
+---
+- tapOn:
+    point: ${POINT}

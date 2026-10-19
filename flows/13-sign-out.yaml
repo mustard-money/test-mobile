@@ -1,0 +1,89 @@
+appId: com.mustard.app
+name: 13 Sign out and sign in again
+---
+# Something added while signed in, to check it survives signing out.
+- launchApp
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Expenses
+- tapOn: Add expense
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Name
+      VALUE: Parking
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Amount
+      VALUE: "150"
+- runFlow:
+    file: common/choose.yaml
+    env:
+      FIELD: How often
+      OPTION: Monthly
+- scrollUntilVisible:
+    element: Save expense
+    centerElement: true
+- tapOn: Save expense
+- assertVisible: Parking
+
+# Sign out from Settings: the sign-in prompt is back.
+- runFlow:
+    file: common/open-home-page.yaml
+    env:
+      PAGE: Settings
+- assertVisible: Signed in as ${EMAIL}
+- tapOn: Sign out
+- extendedWaitUntil:
+    visible: Create an account or sign in to save your data to this server.
+    timeout: 15000
+- assertNotVisible: Signed in as.*
+- assertVisible: Create account
+- assertVisible: Sign in
+
+# The data stays on the device.
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Expenses
+- assertVisible: Parking.*
+
+# The assistant needs an account, so it now asks to sign in.
+- tapOn: Open the assistant
+- assertVisible: Sign in to use the assistant; it runs on your Mustard server.
+- tapOn: Close the assistant
+
+# Still signed out after a restart: the session was removed from the device.
+- launchApp
+- runFlow:
+    file: common/open-home-page.yaml
+    env:
+      PAGE: Settings
+- assertVisible: Create an account or sign in to save your data to this server.
+- assertNotVisible: Signed in as.*
+
+# Sign in again with the same account.
+- tapOn: Sign in
+- tapOn: Email
+- inputText: ${EMAIL}
+- tapOn: Password
+- inputText: ${PASSWORD}
+- assertVisible: "•{24}"
+- runFlow: common/hide-keyboard.yaml
+# The submit button (the "Sign in" tab above the form comes first).
+- tapOn:
+    text: Sign in
+    index: 1
+- extendedWaitUntil:
+    visible: Signed in as ${EMAIL}
+    timeout: 15000
+- assertVisible: Synced at.*
+
+# Signed in and synced, with the expense still there.
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Expenses
+- assertVisible: Parking.*

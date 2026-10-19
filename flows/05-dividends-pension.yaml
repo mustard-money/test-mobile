@@ -1,0 +1,86 @@
+appId: com.mustard.app
+name: 05 Add dividends and a future pension
+---
+- launchApp
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Income
+- tapOn: Add income
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Name
+      VALUE: Dividends
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Amount
+      VALUE: "6000"
+- runFlow:
+    file: common/choose.yaml
+    env:
+      FIELD: How often
+      OPTION: Yearly
+- runFlow:
+    file: common/choose.yaml
+    env:
+      FIELD: Income type
+      OPTION: 1099-DIV dividends
+- scrollUntilVisible:
+    element: Save income
+    centerElement: true
+- tapOn: Save income
+- assertVisible: 1099-DIV dividends
+
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Income
+- tapOn: Add income
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Name
+      VALUE: Pension
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Amount
+      VALUE: "2000"
+- runFlow:
+    file: common/choose.yaml
+    env:
+      FIELD: Income type
+      OPTION: 1099-R pensions, retirement plans
+# Starts July 2040: "Starts" comes before "Ends", so its Month and Year are
+# the first on the form.
+- scrollUntilVisible:
+    element: Starts
+    centerElement: true
+- runFlow:
+    file: common/choose.yaml
+    env:
+      FIELD: Month \(optional\)
+      OPTION: Jul
+# The year starts out as this year (new income starts the month it's added).
+- scrollUntilVisible:
+    element: Year
+    centerElement: true
+- tapOn: Year
+- eraseText
+- inputText: "2040"
+- runFlow: common/hide-keyboard.yaml
+- scrollUntilVisible:
+    element: Save income
+    centerElement: true
+- tapOn: Save income
+- assertVisible: From July 2040
+
+# Today's total leaves out the pension: $10,833.33 + $500.
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Income
+- assertVisible: .*\$11,333.33.*
+- assertVisible: 1 income isn’t in effect today and isn’t counted.

@@ -1,0 +1,14 @@
+# Opens a page listed under Home in the navigation menu (Profile, Settings).
+# Usage: - runFlow: { file: common/open-home-page.yaml, env: { PAGE: Profile } }
+appId: com.mustard.app
+---
+- runFlow: open-menu.yaml
+- runFlow:
+    when:
+      visible: Expand Home
+    commands:
+      - tapOn: Expand Home
+- runFlow:
+    file: menu-entry.yaml
+    env:
+      ENTRY: ${PAGE}

@@ -1,0 +1,31 @@
+# Picks OPTION in the dropdown labelled FIELD (a regex): the first one on the
+# form, when several share the label. The dropdown is first scrolled to the
+# middle of the screen.
+# Usage:
+#   - runFlow:
+#       file: common/choose.yaml
+#       env:
+#         FIELD: How often
+#         OPTION: Bi-weekly
+#
+# Android names a dropdown "<label>, <current value>", and Maestro also sees the
+# visible label above it there, so the label alone would tap that text instead.
+appId: com.mustard.app
+---
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - scrollUntilVisible:
+          element: ${FIELD}, .*
+          centerElement: true
+      - tapOn: ${FIELD}, .*
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - scrollUntilVisible:
+          element: ${FIELD}
+          centerElement: true
+      - tapOn: ${FIELD}
+- tapOn: ${OPTION}

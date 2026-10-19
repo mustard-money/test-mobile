@@ -1,0 +1,74 @@
+appId: com.mustard.app
+name: 06 Add investments with a withdrawal plan
+---
+- launchApp
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Investments
+- tapOn: Add investment
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Name
+      VALUE: Brokerage
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Value
+      VALUE: "50000"
+- scrollUntilVisible:
+    element: Save investment
+    centerElement: true
+- tapOn: Save investment
+- assertVisible: .*Brokerage.*
+
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Investments
+- tapOn: Add investment
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Name
+      VALUE: Rollover IRA
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Value
+      VALUE: "300000"
+- runFlow:
+    file: common/choose.yaml
+    env:
+      FIELD: Account type
+      OPTION: IRA - Traditional
+# Withdrawals start in 2045 (the form's other Year is the value's as-of date).
+- scrollUntilVisible:
+    element: Withdrawals start
+    centerElement: true
+- tapOn:
+    text: Year
+    below: Withdrawals start
+- inputText: "2045"
+- runFlow: common/hide-keyboard.yaml
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Withdraw each year, % of balance
+      VALUE: "4"
+- scrollUntilVisible:
+    element: Save investment
+    centerElement: true
+- tapOn: Save investment
+- assertVisible: 4% of the balance a year, from 2045
+
+# Total: $50,000 + $300,000 + the $80,000 401(k) entered on Salary, which is in
+# the list as an investment of its own (linked to Salary).
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Investments
+- assertVisible: .*\$430,000.00.*
+- assertVisible: '401\(k\) - Traditional from Salary'
+- assertVisible: Paycheck contributions

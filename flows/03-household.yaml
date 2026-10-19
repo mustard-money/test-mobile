@@ -1,0 +1,56 @@
+appId: com.mustard.app
+name: 03 Add, edit and remove household members
+---
+- launchApp
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Household
+- tapOn: Add profile
+- tapOn: Name
+- inputText: Alex
+- runFlow: common/hide-keyboard.yaml
+- tapOn: Me
+- tapOn: Birth year (optional)
+- inputText: "1988"
+- runFlow: common/hide-keyboard.yaml
+- tapOn: Save profile
+- assertVisible: Alex
+
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Household
+- tapOn: Add profile
+- tapOn: Name
+- inputText: Sam
+- runFlow: common/hide-keyboard.yaml
+- tapOn: Child
+- tapOn: Save profile
+
+# Edit from the menu: give Sam a birth year.
+- tapOn: Show navigation menu
+- tapOn: Edit Sam
+- tapOn: Birth year (optional)
+- inputText: "2019"
+- runFlow: common/hide-keyboard.yaml
+- tapOn: Save changes
+- assertVisible: .*2019.*
+
+# Add someone by mistake, then delete them from the menu.
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Household
+- tapOn: Add profile
+- tapOn: Name
+- inputText: Typo
+- runFlow: common/hide-keyboard.yaml
+- tapOn: Save profile
+- tapOn: Show navigation menu
+- tapOn: Delete Typo
+- tapOn: Delete
+# Deleting the open record returns to the Household list.
+- assertVisible: Alex.*
+- assertVisible: Sam.*Child.*
+- assertNotVisible: Typo.*

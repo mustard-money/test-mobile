@@ -1,0 +1,24 @@
+# Turns off password AutoFill on the test simulator (Settings > General >
+# AutoFill & Passwords). With it on, iOS covers the sign-up form with "Use
+# Strong Password?" and asks to save the password afterwards; neither prompt is
+# part of the app, so Maestro can't see or dismiss them.
+#
+# This flow only opens the page: Maestro taps an element's centre, but the
+# switch sits at the row's right edge, so run.sh reads the row's bounds and
+# taps the switch with setup/tap-point.yaml when it's on.
+appId: com.apple.Preferences
+---
+- launchApp:
+    stopApp: true
+- extendedWaitUntil:
+    visible:
+      id: com.apple.settings.general
+    timeout: 15000
+- waitForAnimationToEnd
+- tapOn:
+    id: com.apple.settings.general
+- scrollUntilVisible:
+    element:
+      id: com.apple.settings.general.autoFillAndPasswords
+- tapOn:
+    id: com.apple.settings.general.autoFillAndPasswords

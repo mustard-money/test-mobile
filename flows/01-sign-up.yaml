@@ -1,0 +1,32 @@
+appId: com.mustard.app
+name: 01 Sign up and turn on sync
+---
+# A fresh install: no data, no saved session.
+- launchApp:
+    clearState: true
+    clearKeychain: true
+- assertVisible: Welcome to Mustard
+
+- runFlow:
+    file: common/open-home-page.yaml
+    env:
+      PAGE: Settings
+# The switch (the row's text comes first).
+- tapOn:
+    text: Save to server
+    index: 1
+- tapOn: Create account
+- tapOn: Email
+- inputText: ${EMAIL}
+- tapOn: Password
+- inputText: ${PASSWORD}
+# All 24 characters went in (an AutoFill prompt would swallow typing; run.sh
+# turns AutoFill off on iOS).
+- assertVisible: "•{24}"
+- runFlow: common/hide-keyboard.yaml
+# The form's submit button (the page is titled "Sign in or join").
+- tapOn: Create account
+
+# Back on Settings, signed in and synced.
+- assertVisible: Signed in as ${EMAIL}
+- assertVisible: Synced at.*

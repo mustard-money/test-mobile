@@ -1,0 +1,83 @@
+appId: com.mustard.app
+name: 04 Add W-2 income with workplace savings
+---
+# Salary: $5,000 every 2 weeks = $130,000 a year.
+- launchApp
+- runFlow:
+    file: common/open-section.yaml
+    env:
+      SECTION: Income
+- tapOn: Add income
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Name
+      VALUE: Salary
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Amount
+      VALUE: "5000"
+- runFlow:
+    file: common/choose.yaml
+    env:
+      FIELD: How often
+      OPTION: Bi-weekly
+- assertVisible: W-2 wages
+
+# 401(k): the plan's fields come first, so the first "Your contribution" and
+# "Balance" are its own (the 457(b) has the same labels further down).
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Your contribution, % of pay
+      VALUE: "10"
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Employer match, % of your contribution
+      VALUE: "50"
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Up to, % of pay \(blank if no limit\)
+      VALUE: "6"
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Balance
+      VALUE: "80000"
+
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Your contributions per year
+      VALUE: "4000"
+- runFlow:
+    file: common/fill.yaml
+    env:
+      FIELD: Employer contributions per year
+      VALUE: "1000"
+- scrollUntilVisible:
+    element: Family coverage
+    centerElement: true
+- tapOn: Family coverage
+
+# The live summary: 10% of $130,000, and 50% of the first 6% of pay.
+- scrollUntilVisible:
+    element: .*\$13,000 a year from you, \$3,900 from your employer.*
+    direction: UP
+- scrollUntilVisible:
+    element: Save income
+    centerElement: true
+- tapOn: Save income
+
+# The item page estimates taxes and withholding per paycheck.
+- assertVisible: Salary
+- scrollUntilVisible:
+    element: Estimated taxes and withholding
+- scrollUntilVisible:
+    element: -\$13,000.00
+- assertVisible: -\$500.00
+- scrollUntilVisible:
+    element: Take-home pay
